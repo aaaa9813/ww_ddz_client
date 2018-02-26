@@ -121,6 +121,14 @@ enum host_msg
     PT_DDZ_USER_PASS,
 
     PT_DDZ_GAME_START,
+    PT_DDZ_DZPAI,
+
+    PT_DDZ_USER_JIAOPAI,
+    PT_DDZ_GAME_END,
+
+    PT_DDZ_BALANCE,
+
+    PT_DDZ_MATCH_ACCEPT,
 };
 class CServerInfo
 {
@@ -140,6 +148,8 @@ public	struct PT_ENTER_GAME_REQUEST_INFO
 	
 };
 
+
+
 [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
 public	struct PT_ENTER_GAME_ACCEPT_INFO
 {
@@ -152,30 +162,161 @@ public struct PT_READY_REQUEST_INFO
 {
 
 }
+
+[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+struct PT_DDZ_CHUPAI_INFO
+{
+
+    public byte id;
+
+    public uint nMsgid;
+
+    public uint uid;
+    public int painum;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+    public int[] pai;
+
+};
+
+[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+struct PT_DDZ_PASS_INFO
+{
+
+    public byte id;
+
+    public uint nMsgid;
+
+   
+};
+[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+struct PT_DDZ_JIAOFEN_INFO
+{
+
+    public byte id;
+
+    public uint nMsgid;
+
+    public int nFen;
+
+};
+
+
 [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
 public struct PT_DDZ_GAME_START_INFO
 {
     public byte id;
 
-    public int msg2id;
+    public uint msg2id;
 
-    public int nActUid;
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
     public int[] dipai;
 
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 17)]
     public int[] pai;
 
-    //地方的玩家ID
-    public int dizhuId;
+    //地主ID
+    public int nActUid;
 }
 
+[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+struct PT_DDZ_DZPAI_INFO
+{
+    public byte id;
+
+    public uint nMsgid;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+    public int[] pai;
+
+    int wScore;
+
+    public int dwUserId;
+    public int nActUid;
+
+};
+
+[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+struct SPaiInfo
+{
+    public uint num;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+    public uint[] pai;
+};
+
+[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+struct PT_DDZ_GAME_END_INFO
+{
+    public byte id;
+
+    public uint nMsgid;
+
+    public int nGameId;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+    public SPaiInfo[] pai;
+
+};
+
+[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+struct PT_DDZ_BALANCE_INFO
+{
+    public byte id;
+
+    public uint nMsgid;
+
+    public int nMultiple;
+    public int nScoreType;
+    public int nTax;
+    public int nBombNum;
+    public int nRocketNum;
+    public int nSpriteNum;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+    public int[] nScore;
+    bool bWin;
+
+};
+
+
+[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+struct PT_DDZ_USER_CHUPAI_INFO
+{
+    public byte id;
+
+    public uint nMsgid;
+
+    public int nUid;
+    public int nNum;
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+    public int[] nPai;
+
+    public int nActUid;
+
+};
 [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
 struct SUserIndexInfo
 {
     public int uid;
     public int index;
 };
+
+[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+struct PT_DDZ_MATCH_ACCEPT_INFO
+{
+    public char id_1;
+    public int id_2;
+
+    public int serverid;
+    public int gameid;
+
+    public int usernum;
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+    SUserIndexInfo[] userindex;
+};
+
+
 
 [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
 struct PT_MJ_MATCH_ACCEPT_INFO

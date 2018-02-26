@@ -124,6 +124,16 @@ public class Interaction : MonoBehaviour
         gbReady.SetActive(false);
     }
 
+    public void OnGameStart(PT_DDZ_GAME_START_INFO info1)
+    {
+        m_Controller.net_XiPai(info1.pai, 17, info1.dipai, 3);
+
+        //抢地主出现
+        gbQiangDiZhu.SetActive(true);
+        gbBuQiang.SetActive(true);
+        gbReady.SetActive(false);
+    }
+
     /// <summary>
     /// 出牌回调
     /// </summary>

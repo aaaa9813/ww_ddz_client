@@ -112,18 +112,18 @@ struct TGSUpdateLadder
                     Debug.Log(string.Format("==PT_HOST_MESSAGE===={0}", Id));
 
                     //读出内存中的每二个消息ID
-                    int msg2id = (int)Marshal.ReadInt32(data,1);
+                    int msg2id = (int)Marshal.ReadInt32(data, 1);
                     Debug.Log(string.Format("==msg2 id===={0}", msg2id));
                     switch (msg2id)
                     {
-                        case (int)host_msg.PT_MJ_MATCH_ACCEPT:
+                        case (int)host_msg.PT_DDZ_MATCH_ACCEPT:
                             {
                                 Debug.Log("===match accept===");
 
                             }
                             break;
                         case (int)host_msg.PT_DDZ_GAME_START:
-              
+
                             {
                                 Debug.Log("===game start===");
 
@@ -141,19 +141,77 @@ struct TGSUpdateLadder
                                 {
                                     ita = GameObject.Find("/Canvas/myScenePanel").GetComponent<Interaction>();
                                 }
-                                ita.OnGameStart();
+                                ita.OnGameStart(info1);
 
 
 
                                 //自己先开始操作,叫分
-                                if(info1.nActUid == m_Player.m_nUid)
+                                if (info1.nActUid == m_Player.m_nUid)
                                 {
                                     //显示叫分
 
                                 }
-                      
+
                             }
                             break;
+
+                        case (int)host_msg.PT_DDZ_BALANCE:
+                            {
+
+                            }
+                            break;
+
+                        case (int)host_msg.PT_DDZ_CHUPAI:
+                            {
+
+                            }
+                            break;
+                        case (int)host_msg.PT_DDZ_JIAOFEN:
+                            {
+
+                            }
+                            break;
+                        case (int)host_msg.PT_DDZ_PASS:
+                            {
+
+                            }
+                            break;
+
+                        case (int)host_msg.PT_DDZ_USER_CHUPAI:
+                            {
+
+                            }
+                            break;
+                        case (int)host_msg.PT_DDZ_USER_JIAOFEN:
+                            {
+
+                            }
+                            break;
+                        case (int)host_msg.PT_DDZ_USER_PASS:
+                            {
+
+                            }
+                            break;
+
+
+                        case (int)host_msg.PT_DDZ_DZPAI:
+                            {
+
+                            }
+                            break;
+
+                        case (int)host_msg.PT_DDZ_USER_JIAOPAI:
+                            {
+
+                            }
+                            break;
+                        case (int)host_msg.PT_DDZ_GAME_END:
+                            {
+
+                            }
+                            break;
+
+
 
                         default:
                             {

@@ -10,15 +10,27 @@ public class Card
     private readonly Weight weight;
     private readonly Suits color;
     private CharacterType belongTo;
+
+    private readonly int id;
     private bool makedSprite;
 
-    public Card(string name, Weight weight, Suits color, CharacterType belongTo)
+    public Card(string name, Weight weight, Suits color, CharacterType belongTo, int id)
     {
+
         makedSprite = false;
         cardName = name;
         this.weight = weight;
         this.color = color;
         this.belongTo = belongTo;
+        this.id = id;
+    }
+
+    /// <summary>
+    /// 返回牌名
+    /// </summary>
+    public int GetId
+    {
+        get { return id; }
     }
 
     /// <summary>

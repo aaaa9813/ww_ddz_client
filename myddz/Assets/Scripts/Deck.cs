@@ -59,22 +59,24 @@ public class Deck
     /// </summary>
     void CreateDeck()
     {
+        int i = 0;
         //创建普通扑克
         for (int color = 0; color < 4; color++)
         {
             for (int value = 0; value < 13; value++)
             {
+                i++;
                 Weight w = (Weight)value;
                 Suits s = (Suits)color;
 				string name = string.Format("Poke_{0}_{1}", color, value);
-                Card card = new Card(name, w, s, ctype);
+                Card card = new Card(name, w, s, ctype, i);
                 library.Add(card);
             }
         }
 
         //创建大小joker
-        Card smallJoker = new Card("Poke_4_13", Weight.SJoker, Suits.None, ctype);
-		Card largeJoker = new Card("Poke_4_14", Weight.LJoker, Suits.None, ctype);
+        Card smallJoker = new Card("Poke_4_13", Weight.SJoker, Suits.None, ctype, 53);
+		Card largeJoker = new Card("Poke_4_14", Weight.LJoker, Suits.None, ctype, 54);
         library.Add(smallJoker);
         library.Add(largeJoker);
     }
@@ -105,6 +107,18 @@ public class Deck
         }
     }
 
+    public Card GetCardById(int id)
+    {
+        for(int i = 0; i < library.Count; i++)
+        {
+            if(library[i].GetId == id)
+            {
+                return library[i];
+            }
+        }
+
+        return null;
+    }
     /// <summary>
     /// 发牌
     /// </summary>

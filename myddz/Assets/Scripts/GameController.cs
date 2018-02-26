@@ -168,6 +168,29 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void net_XiPai(int[] mypai, int mypainum, int[] desk, int desknum)
+    {
+
+
+        for(int i = 0; i< mypainum; i++)
+        {
+            DealTo(CharacterType.Player, mypai[i]);
+        }
+
+        for (int i = 0; i < desknum; i++)
+        {
+            DealTo(CharacterType.Desk, desk[i]);
+        }
+
+
+         //
+        for (int i = 1; i < 5; i++)
+        {
+            MakeHandCardsSprite((CharacterType)i, false);
+        }
+    }
+
+
     /// <summary>
     /// 游戏结束
     /// </summary>
@@ -427,6 +450,24 @@ public class GameController : MonoBehaviour
             HandCards cards = playerObj.GetComponent<HandCards>();
 
             Card movedCard = Deck.Instance.Deal();
+            cards.AddCard(movedCard);
+        }
+    }
+
+
+    void DealTo(CharacterType person, int id)
+    {
+        if (person == CharacterType.Desk)
+        {
+            Card movedCard = Deck.Instance.GetCardById(id);
+            DeskCardsCache.Instance.AddCard(movedCard);
+        }
+        else
+        {
+            GameObject playerObj = GameObject.Find(person.ToString());
+            HandCards cards = playerObj.GetComponent<HandCards>();
+
+            Card movedCard = Deck.Instance.GetCardById(id);
             cards.AddCard(movedCard);
         }
     }
