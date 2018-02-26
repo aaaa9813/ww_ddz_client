@@ -55,13 +55,13 @@ public class Restart : MonoBehaviour
     /// </summary>
     void Next()
     {
-        controller.BackToDeck();
-        controller.DestroyAllSprites();
-        DeskCardsCache.Instance.Clear();
-		GameObject deal = GameObject.Find("myScenePanel").transform.Find("DealBtn").gameObject;
-        deal.SetActive(true);
-        Destroy(this.gameObject);
-        ResetDisplay();
+  //      controller.BackToDeck();
+  //      controller.DestroyAllSprites();
+  //      DeskCardsCache.Instance.Clear();
+		//GameObject deal = GameObject.Find("myScenePanel").transform.Find("DealBtn").gameObject;
+  //      deal.SetActive(true);
+  //      Destroy(this.gameObject);
+  //      ResetDisplay();
     }
 
     /// <summary>

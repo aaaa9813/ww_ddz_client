@@ -137,6 +137,18 @@ struct TGSUpdateLadder
                                 info1 = (PT_DDZ_GAME_START_INFO)(PtrToStruct(data, typeof(PT_DDZ_GAME_START_INFO)));
 
 
+                                GameObject playerObj = GameObject.Find("Player");
+                                HandCards cards = playerObj.GetComponent<HandCards>();
+
+
+                                for (int i = 0; i < 17; i++)
+                                {
+                                    Card card = Deck.Instance.GetCardById(info1.pai[i]);
+
+                                    cards.AddCard(card);
+
+                                }
+
                                 if (ita == null)
                                 {
                                     ita = GameObject.Find("/Canvas/myScenePanel").GetComponent<Interaction>();
