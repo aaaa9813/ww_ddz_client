@@ -8,9 +8,10 @@ using System.Collections.Generic;
 /// </summary>
 using UnityEngine.UI;
 
-enum GAME_STATE
+enum GAME_OPT_STATE
 {
-    GAME_READY = 0,
+    GAME_NONE=0,
+    GAME_READY,
     GAME_JIAODIZHU,
     GAME_DAPAI,
 }
@@ -105,7 +106,7 @@ public class Interaction : MonoBehaviour
 		btnTmp.onClick.AddListener (delegate() {
 			{
                 Debug.Log("===不叫===");
-                this.BuQiangCallBack ();
+                this.QiangDiZhuCallBack(0);
 			}
 		});
 		//ww
@@ -123,11 +124,28 @@ public class Interaction : MonoBehaviour
 //        grab.SetActive(false);
 //        disgrab.SetActive(false);
     }
-    void SetGameSate(GAME_STATE state = GAME_STATE.GAME_READY)
+    void SetGameSate(GAME_OPT_STATE state = GAME_OPT_STATE.GAME_READY)
     {
         switch (state)
         {
-            case GAME_STATE.GAME_DAPAI:
+
+            case GAME_OPT_STATE.GAME_NONE:
+                {
+                    btnReady.SetActive(false);
+
+
+                    btnChuPai.SetActive(false);
+                    btnBuChu.SetActive(false);
+                    btnTiShi.SetActive(false);
+
+                    btn1Fen.SetActive(false);
+                    btn2Fen.SetActive(false);
+                    btn3Fen.SetActive(false);
+
+                    btnBuQiang.SetActive(false);
+                }
+                break;
+            case GAME_OPT_STATE.GAME_DAPAI:
                 {
 
                     btnReady.SetActive(false);
@@ -145,7 +163,7 @@ public class Interaction : MonoBehaviour
                 }
                 break;
 
-            case GAME_STATE.GAME_JIAODIZHU:
+            case GAME_OPT_STATE.GAME_JIAODIZHU:
                 {
                     btnReady.SetActive(false);
 
@@ -161,7 +179,7 @@ public class Interaction : MonoBehaviour
                     btnBuQiang.SetActive(true);
                 }
                 break;
-            case GAME_STATE.GAME_READY:
+            case GAME_OPT_STATE.GAME_READY:
                 {
                     btnReady.SetActive(true);
 
@@ -220,7 +238,14 @@ public class Interaction : MonoBehaviour
     {
         m_Controller.net_XiPai(info1.pai, 17, info1.dipai, 3);
 
-        SetGameSate(GAME_STATE.GAME_JIAODIZHU);
+        if (info1.nActUid == CPlayer.Instance().m_nUid)
+        {
+            SetGameSate(GAME_OPT_STATE.GAME_JIAODIZHU);
+        }
+        else
+        {
+            SetGameSate(GAME_OPT_STATE.GAME_NONE);
+        }
     }
 
     /// <summary>
@@ -260,10 +285,14 @@ public class Interaction : MonoBehaviour
     void QiangDiZhuCallBack(int fen)
     {
         //玩家的地主
-        m_Controller.CardsOnTable(CharacterType.Player);
-        OrderController.Instance.Init(CharacterType.Player);
-        btn1Fen.SetActive(false);
-        btnBuQiang.SetActive(false);
+        //m_Controller.CardsOnTable(CharacterType.Player);
+        //OrderController.Instance.Init(CharacterType.Player);
+        //btn1Fen.SetActive(false);
+        //btnBuQiang.SetActive(false);
+
+
+        MsgManager m_Msg = GameObject.Find("GameController").GetComponent<MsgManager>();
+        m_Msg.SendJiaoFen(fen);
     }
 
     /// <summary>

@@ -609,6 +609,17 @@ struct TGSUpdateLadder
         SendEx((int)msg_id.PT_HOST_MESSAGE, (int)host_msg.PT_HOST_READY_REQUEST, null, 0, socketindex);
     }
 
+    public void SendJiaoFen(int fen)
+    {
+        PT_DDZ_JIAOFEN_INFO info;
+        info.nFen = fen;
+        info.id = (int)msg_id.PT_HOST_MESSAGE;
+        info.nMsgid = (int)host_msg.PT_DDZ_JIAOFEN;
+
+        byte[] by1 = StructToBytes(info, Marshal.SizeOf(info));
+
+        SendEx((int)msg_id.PT_HOST_MESSAGE, (int)host_msg.PT_DDZ_JIAOFEN, by1, Marshal.SizeOf(info), socketindex);
+    }
     public void SendEntergame(int serverid, int gameid,
                           int uid)
     {
