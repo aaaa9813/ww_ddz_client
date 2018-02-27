@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <GameData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <playerIntegration>800</playerIntegration>
-  <computerOneIntegration>800</computerOneIntegration>
-  <computerTwoIntegration>1800</computerTwoIntegration>
+  <playerIntegration>600</playerIntegration>
+  <computerOneIntegration>600</computerOneIntegration>
+  <computerTwoIntegration>2600</computerTwoIntegration>
 </GameData>

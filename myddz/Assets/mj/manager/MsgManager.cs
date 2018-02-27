@@ -141,13 +141,13 @@ struct TGSUpdateLadder
                                 HandCards cards = playerObj.GetComponent<HandCards>();
 
 
-                                for (int i = 0; i < 17; i++)
-                                {
-                                    Card card = Deck.Instance.GetCardById(info1.pai[i]);
+                                //for (int i = 0; i < 17; i++)
+                                //{
+                                //    Card card = Deck.Instance.GetCardById(info1.pai[i]);
 
-                                    cards.AddCard(card);
+                                //    cards.AddCard(card);
 
-                                }
+                                //}
 
                                 if (ita == null)
                                 {

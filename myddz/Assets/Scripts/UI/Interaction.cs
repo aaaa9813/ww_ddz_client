@@ -8,67 +8,103 @@ using System.Collections.Generic;
 /// </summary>
 using UnityEngine.UI;
 
+enum GAME_STATE
+{
+    GAME_READY = 0,
+    GAME_JIAODIZHU,
+    GAME_DAPAI,
+}
 
 public class Interaction : MonoBehaviour
 {
-    private GameObject gbReady;
-    private GameObject gbChuPai;
-    private GameObject gbBuChu;
-    private GameObject gbQiangDiZhu;
-    private GameObject gbBuQiang;
+    private GameObject btnReady;
+    private GameObject btnChuPai;
+    private GameObject btnBuChu;
+    private GameObject btnTiShi;
+    private GameObject btn1Fen;
+    private GameObject btn2Fen;
+    private GameObject btn3Fen;
+    private GameObject btnBuQiang;
     private GameController m_Controller;
     // Use this for initialization
     void Start()
     {
 
-        gbReady = gameObject.transform.Find("BtnReady").gameObject;
+        btnReady = gameObject.transform.Find("BtnReady").gameObject;
 
 
-        gbChuPai = gameObject.transform.Find("BtnChuPai").gameObject;
-        gbBuChu = gameObject.transform.Find("BtnBuChu").gameObject;
+        btnChuPai = gameObject.transform.Find("BtnChuPai").gameObject;
+        btnBuChu = gameObject.transform.Find("BtnBuChu").gameObject;
+        btnTiShi = gameObject.transform.Find("BtnTiShi").gameObject;
+        
+        btn1Fen = gameObject.transform.Find("Btn1Fen").gameObject;
+        btn2Fen = gameObject.transform.Find("Btn2Fen").gameObject;
+        btn3Fen = gameObject.transform.Find("Btn3Fen").gameObject;
 
-        gbQiangDiZhu = gameObject.transform.Find("Btn1Fen").gameObject;
-        gbBuQiang = gameObject.transform.Find("BtnBuQiang").gameObject;
+        btnBuQiang = gameObject.transform.Find("BtnBuQiang").gameObject;
 
         m_Controller = GameObject.Find("GameController").GetComponent<GameController>();
 
-		Button btnTmp = gbReady.GetComponent<Button> ();
+		Button btnTmp = btnReady.GetComponent<Button> ();
 
 		btnTmp.onClick.AddListener (delegate() {
 			{
-                Debug.Log("===发牌===");
+                Debug.Log("===准备===");
                 this.ReadyCallBack ();
 			}
 		});
 
-		btnTmp = gbChuPai.GetComponent<Button> ();
+		btnTmp = btnChuPai.GetComponent<Button> ();
 		btnTmp.onClick.AddListener (delegate() {
 			{
-                Debug.Log("===发牌2===");
+                Debug.Log("===出牌===");
                 this.ChuPaiCallBack ();
 			}
 		});
 
-		btnTmp = gbBuChu.GetComponent<Button> ();
+		btnTmp = btnBuChu.GetComponent<Button> ();
 		btnTmp.onClick.AddListener (delegate() {
 			{
-                Debug.Log("===发牌3===");
+                Debug.Log("===不出===");
                 this.BuChuCallBack ();
 			}
 		});
+        btnTmp = btnTiShi.GetComponent<Button>();
+        btnTmp.onClick.AddListener(delegate () {
+            {
+                Debug.Log("===提示===");
+                this.TiShiCallBack();
+            }
+        });
 
-		btnTmp = gbQiangDiZhu.GetComponent<Button> ();
+        btnTmp = btn1Fen.GetComponent<Button> ();
 		btnTmp.onClick.AddListener (delegate() {
 			{
-                Debug.Log("===发牌4===");
-                this.QiangDiZhuCallBack ();
+                Debug.Log("===１分===");
+                this.QiangDiZhuCallBack (1);
 			}
 		});
 
-		btnTmp = gbBuQiang.GetComponent<Button> ();
+        btnTmp = btn2Fen.GetComponent<Button>();
+        btnTmp.onClick.AddListener(delegate () {
+            {
+                Debug.Log("===２分===");
+                this.QiangDiZhuCallBack(2);
+            }
+        });
+
+        btnTmp = btn3Fen.GetComponent<Button>();
+        btnTmp.onClick.AddListener(delegate () {
+            {
+                Debug.Log("===３分===");
+                this.QiangDiZhuCallBack(3);
+            }
+        });
+
+        btnTmp = btnBuQiang.GetComponent<Button> ();
 		btnTmp.onClick.AddListener (delegate() {
 			{
-                Debug.Log("===发牌5===");
+                Debug.Log("===不叫===");
                 this.BuQiangCallBack ();
 			}
 		});
@@ -87,15 +123,71 @@ public class Interaction : MonoBehaviour
 //        grab.SetActive(false);
 //        disgrab.SetActive(false);
     }
+    void SetGameSate(GAME_STATE state = GAME_STATE.GAME_READY)
+    {
+        switch (state)
+        {
+            case GAME_STATE.GAME_DAPAI:
+                {
 
+                    btnReady.SetActive(false);
+
+
+                    btnChuPai.SetActive(true);
+                    btnBuChu.SetActive(true);
+                    btnTiShi.SetActive(true);
+
+                    btn1Fen.SetActive(false);
+                    btn2Fen.SetActive(false);
+                    btn3Fen.SetActive(false);
+
+                    btnBuQiang.SetActive(false);
+                }
+                break;
+
+            case GAME_STATE.GAME_JIAODIZHU:
+                {
+                    btnReady.SetActive(false);
+
+
+                    btnChuPai.SetActive(false);
+                    btnBuChu.SetActive(false);
+                    btnTiShi.SetActive(false);
+
+                    btn1Fen.SetActive(true);
+                    btn2Fen.SetActive(true);
+                    btn3Fen.SetActive(true);
+
+                    btnBuQiang.SetActive(true);
+                }
+                break;
+            case GAME_STATE.GAME_READY:
+                {
+                    btnReady.SetActive(true);
+
+
+                    btnChuPai.SetActive(false);
+                    btnBuChu.SetActive(false);
+                    btnTiShi.SetActive(false);
+
+                    btn1Fen.SetActive(false);
+                    btn2Fen.SetActive(false);
+                    btn3Fen.SetActive(false);
+
+                    btnBuQiang.SetActive(false);
+                }
+                break;
+        }
+
+    }
     /// <summary>
     /// 激活出牌按钮
     /// </summary>
     /// <param name="canReject"></param>
     void ActiveCardButton(bool canReject)
     {
-        gbChuPai.SetActive(true);
-        gbBuChu.SetActive(true);
+        btnChuPai.SetActive(true);
+        btnBuChu.SetActive(true);
 
       //ww  disard.GetComponent<UIButton>().isEnabled = canReject;
     }
@@ -119,19 +211,16 @@ public class Interaction : MonoBehaviour
         m_Controller.XiPai();
 
         //抢地主出现
-        gbQiangDiZhu.SetActive(true);
-        gbBuQiang.SetActive(true);
-        gbReady.SetActive(false);
+        btn1Fen.SetActive(true);
+        btnBuQiang.SetActive(true);
+        btnReady.SetActive(false);
     }
 
     public void OnGameStart(PT_DDZ_GAME_START_INFO info1)
     {
         m_Controller.net_XiPai(info1.pai, 17, info1.dipai, 3);
 
-        //抢地主出现
-        gbQiangDiZhu.SetActive(true);
-        gbBuQiang.SetActive(true);
-        gbReady.SetActive(false);
+        SetGameSate(GAME_STATE.GAME_JIAODIZHU);
     }
 
     /// <summary>
@@ -142,9 +231,17 @@ public class Interaction : MonoBehaviour
         PlayCard playCard = GameObject.Find("Player").GetComponent<PlayCard>();
         if (playCard.CheckSelectCards())
         {
-            gbChuPai.SetActive(false);
-            gbBuChu.SetActive(false);
+            btnChuPai.SetActive(false);
+            btnBuChu.SetActive(false);
         }
+    }
+
+    /// <summary>
+    /// 提示
+    /// </summary>
+    void TiShiCallBack()
+    {
+
     }
 
     /// <summary>
@@ -153,20 +250,20 @@ public class Interaction : MonoBehaviour
     void BuChuCallBack()
     {
         OrderController.Instance.Turn();
-        gbChuPai.SetActive(false);
-        gbBuChu.SetActive(false);
+        btnChuPai.SetActive(false);
+        btnBuChu.SetActive(false);
     }
 
     /// <summary>
     /// 抢地主
     /// </summary>
-    void QiangDiZhuCallBack()
+    void QiangDiZhuCallBack(int fen)
     {
         //玩家的地主
         m_Controller.CardsOnTable(CharacterType.Player);
         OrderController.Instance.Init(CharacterType.Player);
-        gbQiangDiZhu.SetActive(false);
-        gbBuQiang.SetActive(false);
+        btn1Fen.SetActive(false);
+        btnBuQiang.SetActive(false);
     }
 
     /// <summary>
@@ -177,8 +274,8 @@ public class Interaction : MonoBehaviour
         int index = Random.Range(2, 4);
         m_Controller.CardsOnTable((CharacterType)index);
         OrderController.Instance.Init((CharacterType)index);
-        gbQiangDiZhu.SetActive(false);
-        gbBuQiang.SetActive(false);
+        btn1Fen.SetActive(false);
+        btnBuQiang.SetActive(false);
     }
 
 }
