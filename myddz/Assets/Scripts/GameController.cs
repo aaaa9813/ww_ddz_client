@@ -93,7 +93,7 @@ public class GameController : MonoBehaviour
 		scene.transform.SetParent(m_Canvas.transform, false);
 		scene.name = scene.name.Replace("(Clone)", "");
 
-		scene.AddComponent<Interaction>();
+		scene.AddComponent<CInteractionMgr>();
 
         GameObject player = scene.transform.Find("Player").gameObject;
         HandCards playerCards = player.AddComponent<HandCards>();

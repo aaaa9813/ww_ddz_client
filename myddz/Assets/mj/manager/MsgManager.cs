@@ -67,7 +67,7 @@ struct TGSUpdateLadder
 
 */
 
-    private Interaction ita;
+    private CInteractionMgr m_InteractionMgr;
 
     public Int64 socketindex;
 
@@ -149,11 +149,11 @@ struct TGSUpdateLadder
 
                                 //}
 
-                                if (ita == null)
+                                if (m_InteractionMgr == null)
                                 {
-                                    ita = GameObject.Find("/Canvas/myScenePanel").GetComponent<Interaction>();
+                                    m_InteractionMgr = GameObject.Find("/Canvas/myScenePanel").GetComponent<CInteractionMgr>();
                                 }
-                                ita.OnGameStart(info1);
+                                m_InteractionMgr.OnGameStart(info1);
 
 
 
@@ -191,29 +191,67 @@ struct TGSUpdateLadder
 
                         case (int)host_msg.PT_DDZ_USER_CHUPAI:
                             {
+                                PT_DDZ_USER_CHUPAI_INFO info = (PT_DDZ_USER_CHUPAI_INFO)(PtrToStruct(data, typeof(PT_DDZ_USER_CHUPAI_INFO)));
 
+                                if (info.nActUid == CPlayer.Instance().m_nUid)
+                                {
+                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_DAPAI);
+                                }
+                                else
+                                {
+                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_NONE);
+                                }
                             }
                             break;
-                        case (int)host_msg.PT_DDZ_USER_JIAOFEN:
-                            {
-
-                            }
-                            break;
+                   
                         case (int)host_msg.PT_DDZ_USER_PASS:
                             {
+                                PT_DDZ_USER_PASS_INFO info = (PT_DDZ_USER_PASS_INFO)(PtrToStruct(data, typeof(PT_DDZ_USER_PASS_INFO)));
 
+                                if (info.nActUid == CPlayer.Instance().m_nUid)
+                                {
+                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_DAPAI);
+                                }
+                                else
+                                {
+                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_NONE);
+                                }
                             }
                             break;
 
 
                         case (int)host_msg.PT_DDZ_DZPAI:
                             {
+                                PT_DDZ_DZPAI_INFO info = (PT_DDZ_DZPAI_INFO)(PtrToStruct(data, typeof(PT_DDZ_DZPAI_INFO)));
 
+                                if(info.nActUid == CPlayer.Instance().m_nUid)
+                                {
+                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_DAPAI);
+                                }
+                                else
+                                {
+                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_NONE);
+                                }
                             }
                             break;
 
                         case (int)host_msg.PT_DDZ_USER_JIAOPAI:
                             {
+                                PT_DDZ_USER_JIAOPAI_INFO info = (PT_DDZ_USER_JIAOPAI_INFO)(PtrToStruct(data, typeof(PT_DDZ_USER_JIAOPAI_INFO)));
+
+                                if (m_InteractionMgr == null)
+                                {
+                                    m_InteractionMgr = GameObject.Find("/Canvas/myScenePanel").GetComponent<CInteractionMgr>();
+                                }
+                                if (info.nActUid == CPlayer.Instance().m_nUid)
+                                {
+                                   
+                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_JIAODIZHU);
+                                }
+                                else
+                                {
+                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_NONE);
+                                }
 
                             }
                             break;
@@ -517,6 +555,33 @@ struct TGSUpdateLadder
         return value;
     }
 
+
+    /// <summary>
+    /// short数组转换成byte数组
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="target"></param>
+    /// <param name="sourceLen">要Copy的source数组个数</param>
+    public static void IntArr2ByteArr(int[] source, byte[] target, int sourceLen)
+    {
+        IntPtr tmpPtr = IntPtr.Zero;
+        try
+        {
+            tmpPtr = Marshal.AllocHGlobal(sourceLen * 2);  // 申请内存
+                                                           //copy数据到指定非托管内存地址
+            Marshal.Copy(source, 0, tmpPtr, sourceLen);
+            //copy非托管内存数据到指定byte数组
+            Marshal.Copy(tmpPtr, target, 0, sourceLen * 2);
+            Marshal.FreeHGlobal(tmpPtr); // 清空申请的非托管内存
+        }
+        catch (Exception ex)
+        {
+            if (tmpPtr != IntPtr.Zero)
+                Marshal.FreeHGlobal(tmpPtr);
+            throw new Exception("内存操作失败：" + ex.ToString());
+        }
+    }
+
     public void Send_MJ_ZuoZhuang(int ZhuangNum, long socketindex)
     {
 
@@ -607,6 +672,36 @@ struct TGSUpdateLadder
     public void SendReady()
     {
         SendEx((int)msg_id.PT_HOST_MESSAGE, (int)host_msg.PT_HOST_READY_REQUEST, null, 0, socketindex);
+    }
+
+
+    public void SendChuPai(int[] pai, int num)
+    {
+        PT_DDZ_CHUPAI_INFO info;
+        info.uid = 0;
+        info.id = (int)msg_id.PT_HOST_MESSAGE;
+        info.nMsgid = (int)host_msg.PT_DDZ_CHUPAI;
+
+        info.pai = pai;
+        
+        info.painum = num;
+
+
+        byte[] by1 = StructToBytes(info, Marshal.SizeOf(info));
+
+        SendEx((int)msg_id.PT_HOST_MESSAGE, (int)host_msg.PT_DDZ_CHUPAI, by1, Marshal.SizeOf(info), socketindex);
+    }
+
+    public void SendPass()
+    {
+        PT_DDZ_PASS_INFO info;
+        info.id = (int)msg_id.PT_HOST_MESSAGE;
+        info.nMsgid = (int)host_msg.PT_DDZ_PASS;
+
+        byte[] by1 = StructToBytes(info, Marshal.SizeOf(info));
+
+        SendEx((int)msg_id.PT_HOST_MESSAGE, (int)host_msg.PT_DDZ_PASS, by1, Marshal.SizeOf(info), socketindex);
+
     }
 
     public void SendJiaoFen(int fen)

@@ -14,7 +14,7 @@ public class PlayCard : MonoBehaviour
     /// <summary>
     /// 遍历选中的牌和牌精灵
     /// </summary>
-    public bool CheckSelectCards()
+    public bool CheckSelectCards(int[] pai, out int num)
     {
         CardSprite[] sprites = this.GetComponentsInChildren<CardSprite>();
 
@@ -25,10 +25,16 @@ public class PlayCard : MonoBehaviour
         {
             if (sprites[i].Select)
             {
+                pai[selectedCardsList.Count] = sprites[i].Poker.GetId;
+
+
                 selectedSpriteList.Add(sprites[i]);
                 selectedCardsList.Add(sprites[i].Poker);
+               
             }
         }
+
+        num = selectedCardsList.Count;
         //排好序
         CardRules.SortCards(selectedCardsList, true);
         //出牌

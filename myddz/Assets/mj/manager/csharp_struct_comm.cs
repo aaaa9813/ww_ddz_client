@@ -218,7 +218,19 @@ public struct PT_DDZ_GAME_START_INFO
     //地主ID
     public int nActUid;
 }
+[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+struct PT_DDZ_USER_JIAOPAI_INFO
+{
+    public byte id;
 
+    public uint msg2id;
+
+    public uint nUid;
+    public uint nNum;
+
+    public uint nActUid;
+
+}
 [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
 struct PT_DDZ_DZPAI_INFO
 {
@@ -229,9 +241,9 @@ struct PT_DDZ_DZPAI_INFO
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
     public int[] pai;
 
-    int wScore;
+    public int nJiaoFen;
 
-    public int dwUserId;
+    public int nUserId;
     public int nActUid;
 
 };
@@ -259,6 +271,18 @@ struct PT_DDZ_GAME_END_INFO
 
 };
 
+[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+struct PT_DDZ_USER_PASS_INFO
+{
+    public byte id;
+
+    public uint nMsgid;
+
+    public int nUid;
+
+    public int nActUid;
+
+};
 [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
 struct PT_DDZ_BALANCE_INFO
 {
