@@ -69,7 +69,7 @@ public class Deck
                 Weight w = (Weight)value;
                 Suits s = (Suits)color;
 				string name = string.Format("Poke_{0}_{1}", color, value);
-                Card card = new Card(name, w, s, ctype, i);
+                Card card = new Card(name, w, s, ctype, (value + 2) % 13 + 1 + color * 13);
                 library.Add(card);
             }
         }
