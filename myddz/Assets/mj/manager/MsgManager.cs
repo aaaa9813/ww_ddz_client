@@ -467,7 +467,7 @@ struct TGSUpdateLadder
         Debug.Log("=====msgmanager-1-=-==-");
 
 
-        int ret = Connect("192.168.1.110", 61000, "", 0);
+        int ret = Connect("192.168.247.251", 61000, "", 0);
 
         i = ret;
 
