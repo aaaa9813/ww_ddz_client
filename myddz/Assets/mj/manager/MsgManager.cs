@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System;
 
@@ -11,13 +12,12 @@ public class MsgManager : MonoBehaviour
 	[DllImport ("xuanyusong")]
 	private static extern float addFloat(float a,float b);	
 	*/
-    public CPlayer m_Player = null;
+    public CPlayer m_myPlayer = null;
 
-    MsgManager()
-    {
-        m_Player = CPlayer.Instance();
-    }
 
+    public CTable m_GameTable = null;
+
+    
     [SerializeField, SetProperty("Number")]
     private float
             number;
@@ -103,7 +103,7 @@ struct TGSUpdateLadder
                     Debug.Log(string.Format("==ID_CONNECTION_REQUEST_ACCEPTED===={0}", Id));
                     socketindex = sockindex;
 
-                    SendEntergame(101, 2, m_Player.m_nUid);
+                    SendEntergame(101, 2, m_myPlayer.m_nUid);
                 }
                 break;
 
@@ -118,6 +118,20 @@ struct TGSUpdateLadder
                     {
                         case (int)host_msg.PT_DDZ_MATCH_ACCEPT:
                             {
+
+                                PT_DDZ_MATCH_ACCEPT_INFO info = (PT_DDZ_MATCH_ACCEPT_INFO)(PtrToStruct(data, typeof(PT_DDZ_MATCH_ACCEPT_INFO)));
+
+                                Dictionary<int, CUser> m_Userlist = m_GameTable.m_UserlistById;
+                                
+                                for(int i = 0; i < info.usernum;i ++)
+                                {
+                                    CUser user = new CUser();
+                                    user.m_nId = info.userindex[i].uid;
+                                    user.m_nIndex = info.userindex[i].index;
+
+                                    m_Userlist[user.m_nId] = user;
+
+                                }
                                 Debug.Log("===match accept===");
 
                             }
@@ -136,6 +150,9 @@ struct TGSUpdateLadder
                                 //跳过第一个字节,255
                                 info1 = (PT_DDZ_GAME_START_INFO)(PtrToStruct(data, typeof(PT_DDZ_GAME_START_INFO)));
 
+
+                                m_GameTable.m_UserlistById[m_myPlayer.m_nUid].m_nPai = info1.pai;
+                                m_GameTable.m_UserlistById[m_myPlayer.m_nUid].m_nPaiNum = 17;
 
                                 GameObject playerObj = GameObject.Find("Player");
                                 HandCards cards = playerObj.GetComponent<HandCards>();
@@ -158,7 +175,7 @@ struct TGSUpdateLadder
 
 
                                 //自己先开始操作,叫分
-                                if (info1.nActUid == m_Player.m_nUid)
+                                if (info1.nActUid == m_myPlayer.m_nUid)
                                 {
                                     //显示叫分
 
@@ -193,6 +210,14 @@ struct TGSUpdateLadder
                             {
                                 PT_DDZ_USER_CHUPAI_INFO info = (PT_DDZ_USER_CHUPAI_INFO)(PtrToStruct(data, typeof(PT_DDZ_USER_CHUPAI_INFO)));
 
+
+                             //   m_GameTable.m_nPaiNum = info.nNum;
+                                // m_GameTable.m_nPai = (int[])info.nPai.Clone();
+                             //   m_GameTable.m_nPai = info.nPai;
+
+                                m_GameTable.SetTablePai(info.nPai, info.nNum);
+                                m_GameTable.m_nChupaiUserId = info.nUid;
+                                m_GameTable.m_nActId = info.nActUid;
                                 if (info.nActUid == CPlayer.Instance().m_nUid)
                                 {
                                     m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_DAPAI);
@@ -207,6 +232,8 @@ struct TGSUpdateLadder
                         case (int)host_msg.PT_DDZ_USER_PASS:
                             {
                                 PT_DDZ_USER_PASS_INFO info = (PT_DDZ_USER_PASS_INFO)(PtrToStruct(data, typeof(PT_DDZ_USER_PASS_INFO)));
+                               
+                                m_GameTable.m_nActId = info.nActUid;
 
                                 if (info.nActUid == CPlayer.Instance().m_nUid)
                                 {
@@ -216,6 +243,8 @@ struct TGSUpdateLadder
                                 {
                                     m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_NONE);
                                 }
+
+                                Debug.Log(string.Format("PT_DDZ_USER_PASS_uid:{0}", info.nUid));
                             }
                             break;
 
@@ -223,6 +252,11 @@ struct TGSUpdateLadder
                         case (int)host_msg.PT_DDZ_DZPAI:
                             {
                                 PT_DDZ_DZPAI_INFO info = (PT_DDZ_DZPAI_INFO)(PtrToStruct(data, typeof(PT_DDZ_DZPAI_INFO)));
+
+                                m_GameTable.m_nActId = info.nActUid;
+                                m_GameTable.m_nDipai = info.pai;
+                                m_GameTable.m_nJiaoFen = info.nJiaoFen;
+                                m_GameTable.m_nDizhuId = info.nUserId;
 
                                 if(info.nActUid == CPlayer.Instance().m_nUid)
                                 {
@@ -441,7 +475,9 @@ struct TGSUpdateLadder
     void Start()
     {
 
-        m_Player = CPlayer.Instance();
+        m_myPlayer = CPlayer.Instance();
+
+        m_GameTable = CTable.Instance();
 
         OnConnectCall = OnConnectCallFunc;
 
@@ -467,7 +503,8 @@ struct TGSUpdateLadder
         Debug.Log("=====msgmanager-1-=-==-");
 
 
-        int ret = Connect("192.168.247.251", 61000, "", 0);
+        int ret = Connect("192.168.1.110", 61000, "", 0);
+     //   int ret = Connect("192.168.247.251", 61000, "", 0);
 
         i = ret;
 
@@ -484,6 +521,10 @@ struct TGSUpdateLadder
     {
         //真机打开,可看测试效果
         //	return;
+
+
+        InvokeRepeating("SendHeartjump", 3, 5);
+
 
         MsgLoop();
     }
@@ -661,12 +702,7 @@ struct TGSUpdateLadder
 
     public void SendHeartjump()
     {
-        //		RakNet::BitStream bsData;
-        //		bsData.Write((unsigned char) PT_USER_HEART_JUMP);
-        //		SendData(&bsData, m_ServerAddr);
-
-
-        //	SendEx_1id ((int)msg_id.PT_USER_HEART_JUMP, 0, 0, sockindex);
+        SendEx_1id ((int)msg_id.PT_USER_HEART_JUMP, null, 0, socketindex);
     }
 
     public void SendReady()

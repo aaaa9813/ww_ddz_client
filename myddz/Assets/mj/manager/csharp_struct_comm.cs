@@ -57,8 +57,9 @@ enum msg_id
 	PT_ENTER_GAME_ACCEPT = 141,
 
 	PT_HOST_MESSAGE = 180,
+    PT_USER_HEART_JUMP = 188,
 
-	PT_USER_INGAME_MSG = 255,
+    PT_USER_INGAME_MSG = 255,
 };
 
 enum host_msg
@@ -329,7 +330,7 @@ struct SUserIndexInfo
 [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
 struct PT_DDZ_MATCH_ACCEPT_INFO
 {
-    public char id_1;
+    public byte id_1;
     public int id_2;
 
     public int serverid;
@@ -337,7 +338,7 @@ struct PT_DDZ_MATCH_ACCEPT_INFO
 
     public int usernum;
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-    SUserIndexInfo[] userindex;
+    public SUserIndexInfo[] userindex;
 };
 
 

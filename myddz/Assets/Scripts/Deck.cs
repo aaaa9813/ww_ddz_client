@@ -11,6 +11,8 @@ public class Deck
     private List<Card> library;
     private CharacterType ctype;
 
+
+
     public static Deck Instance
     {
         get

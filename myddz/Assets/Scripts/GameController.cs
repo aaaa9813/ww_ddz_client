@@ -15,6 +15,10 @@ public class GameController : MonoBehaviour
 	public GameObject m_Canvas;
     // Use this for initialization
 
+
+    
+
+
 	public Dictionary<string, bool> pokeflag;
     void Start()
     {
