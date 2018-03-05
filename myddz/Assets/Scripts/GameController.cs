@@ -117,6 +117,10 @@ public class GameController : MonoBehaviour
    //     computerTwo.transform.Find("ComputerNotice").gameObject.SetActive(false);
 
         GameObject desk = scene.transform.Find("Desk").gameObject;
+        
+        HandCards deskCards = desk.AddComponent<HandCards>();
+        deskCards.cType = CharacterType.Desk;
+       
         desk.transform.Find("NoticeLabel").gameObject.SetActive(false);
 
         if (!info.Exists)
