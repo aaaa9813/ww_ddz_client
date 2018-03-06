@@ -118,7 +118,7 @@ public class DeskCardsCache
             CardSprite[] cardSprites = GameObject.Find("Desk").GetComponentsInChildren<CardSprite>();
             for (int i = 0; i < cardSprites.Length;i ++)
             {
-                cardSprites[i].transform.parent = null;
+                cardSprites[i].transform.SetParent(null);
                 cardSprites[i].Destroy();
             }
 

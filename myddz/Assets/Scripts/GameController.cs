@@ -118,8 +118,8 @@ public class GameController : MonoBehaviour
 
         GameObject desk = scene.transform.Find("Desk").gameObject;
         
-        HandCards deskCards = desk.AddComponent<HandCards>();
-        deskCards.cType = CharacterType.Desk;
+        //HandCards deskCards = desk.AddComponent<HandCards>();
+        //deskCards.cType = CharacterType.Desk;
        
         desk.transform.Find("NoticeLabel").gameObject.SetActive(false);
 
@@ -174,6 +174,16 @@ public class GameController : MonoBehaviour
         {
             MakeHandCardsSprite((CharacterType)i, false);
         }
+    }
+    public void Dealtodeck(int[] card, int num)
+    {
+        DeskCardsCache.Instance.Clear();
+        for (int i = 0; i < num; i++)
+        {
+            DealTo(CharacterType.Desk, card[i]);
+        }
+
+        MakeHandCardsSprite(CharacterType.Desk, true);
     }
 
     public void net_XiPai(int[] mypai, int mypainum, int[] desk, int desknum)

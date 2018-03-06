@@ -257,26 +257,15 @@ public class CInteractionMgr : MonoBehaviour
 
         int[] pai = new int[20];
 
-        //int count = 0;
-        //if (playCard.CheckSelectCards(pai, out count))
-        //{
-        //    btnChuPai.SetActive(false);
-        //    btnBuChu.SetActive(false);
-        //}
-
-        CardSprite[] sprites = this.GetComponentsInChildren<CardSprite>();
-
         int count = 0;
-        for (int i = 0; i < sprites.Length; i++)
+        if (playCard.CheckSelectCards(pai, out count))
         {
-            if (sprites[i].Select)
-            {
-                pai[count++] = sprites[i].Poker.GetId;
-
-            }
+            btnChuPai.SetActive(false);
+            btnBuChu.SetActive(false);
         }
 
-
+       
+   
         MsgManager m_Msg = GameObject.Find("GameController").GetComponent<MsgManager>();
 
  

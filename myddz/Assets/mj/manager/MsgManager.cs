@@ -208,14 +208,18 @@ struct TGSUpdateLadder
 
                         case (int)host_msg.PT_DDZ_USER_CHUPAI:
                             {
+
                                 PT_DDZ_USER_CHUPAI_INFO info = (PT_DDZ_USER_CHUPAI_INFO)(PtrToStruct(data, typeof(PT_DDZ_USER_CHUPAI_INFO)));
 
 
-                             //   m_GameTable.m_nPaiNum = info.nNum;
+                                Debug.Log(string.Format("PT_DDZ_USER_CHUPAI:{0}", info.nUid));
+                                //   m_GameTable.m_nPaiNum = info.nNum;
                                 // m_GameTable.m_nPai = (int[])info.nPai.Clone();
-                             //   m_GameTable.m_nPai = info.nPai;
+                                //   m_GameTable.m_nPai = info.nPai;
 
-                                m_GameTable.SetTablePai(info.nPai, info.nNum);
+                                GameController controller = GameObject.Find("GameController").GetComponent<GameController>();
+                                controller.Dealtodeck(info.nPai, info.nNum);
+                               // m_GameTable.SetTablePai(info.nPai, info.nNum);
                                 m_GameTable.m_nChupaiUserId = info.nUid;
                                 m_GameTable.m_nActId = info.nActUid;
                                 if (info.nActUid == CPlayer.Instance().m_nUid)

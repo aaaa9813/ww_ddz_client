@@ -230,7 +230,7 @@ public abstract class SmartCard : MonoBehaviour
             for (int i = 0; i < selectedSpriteList.Count; i++)
             {
                 DeskCardsCache.Instance.AddCard(selectedSpriteList[i].Poker);
-                selectedSpriteList[i].transform.parent = GameObject.Find("Desk").transform;
+                selectedSpriteList[i].transform.SetParent(GameObject.Find("Desk").transform);
                 selectedSpriteList[i].Poker = selectedSpriteList[i].Poker;
             }
 

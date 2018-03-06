@@ -2,17 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CPlayer : MonoBehaviour {
+public class CPlayer {
 
 	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     CPlayer()
     {
@@ -168,7 +160,7 @@ public class CTable:MonoBehaviour
         Card largeJoker = new Card("Poke_4_14", Weight.LJoker, Suits.None, 0, 54);
         m_Cardlist[smallJoker.GetId] = smallJoker;
         m_Cardlist[largeJoker.GetId] = largeJoker;
-        
+
         pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)smallJoker.GetCardSuit, (int)smallJoker.GetCardWeight)) as GameObject;
         poker = Instantiate(pokeobj);
         m_Pokerlist[smallJoker.GetId] = poker;

@@ -111,7 +111,7 @@ public class PlayCard : MonoBehaviour
             //先进行卡牌移动
             player.PopCard(selectedSpriteList[i].Poker);
             DeskCardsCache.Instance.AddCard(selectedSpriteList[i].Poker);
-            selectedSpriteList[i].transform.parent = GameObject.Find("Desk").transform;
+            selectedSpriteList[i].transform.SetParent(GameObject.Find("Desk").transform);
         }
 
         DeskCardsCache.Instance.Sort();
