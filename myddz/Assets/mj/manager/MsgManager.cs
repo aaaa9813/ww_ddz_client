@@ -34,6 +34,27 @@ public class MsgManager : MonoBehaviour
         }
     }
 
+    private GameController m_GameCtr;
+
+    public GameController GetGameController()
+    {
+        if (!m_GameCtr)
+        {
+            m_GameCtr = GameObject.Find("GameController").GetComponent<GameController>();
+        }
+        return m_GameCtr;
+    }
+
+    private CInteractionMgr m_InteractionMgr;
+
+    public CInteractionMgr GetInteractionMgr()
+    {
+        if (!m_InteractionMgr)
+        {
+            m_InteractionMgr = GameObject.Find("/Canvas/myScenePanel").GetComponent<CInteractionMgr>();
+        }
+        return m_InteractionMgr;
+    }
 
 
     //===============================
@@ -67,7 +88,6 @@ struct TGSUpdateLadder
 
 */
 
-    private CInteractionMgr m_InteractionMgr;
 
     public Int64 socketindex;
 
@@ -166,11 +186,8 @@ struct TGSUpdateLadder
 
                                 //}
 
-                                if (m_InteractionMgr == null)
-                                {
-                                    m_InteractionMgr = GameObject.Find("/Canvas/myScenePanel").GetComponent<CInteractionMgr>();
-                                }
-                                m_InteractionMgr.OnGameStart(info1);
+                 
+                                GetInteractionMgr().OnGameStart(info1);
 
 
 
@@ -217,18 +234,26 @@ struct TGSUpdateLadder
                                 // m_GameTable.m_nPai = (int[])info.nPai.Clone();
                                 //   m_GameTable.m_nPai = info.nPai;
 
-                                GameController controller = GameObject.Find("GameController").GetComponent<GameController>();
-                                controller.Dealtodeck(info.nPai, info.nNum);
+                           
+                     
                                // m_GameTable.SetTablePai(info.nPai, info.nNum);
                                 m_GameTable.m_nChupaiUserId = info.nUid;
                                 m_GameTable.m_nActId = info.nActUid;
+
+                                if(info.nUid == CPlayer.Instance().m_nUid)
+                                {
+                                    PlayCard playCard = GameObject.Find("Player").GetComponent<PlayCard>();
+
+                                    playCard.PlayCardsEx();
+                                }
+
                                 if (info.nActUid == CPlayer.Instance().m_nUid)
                                 {
-                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_DAPAI);
+                                    GetInteractionMgr().SetGameSate(GAME_OPT_STATE.GAME_DAPAI);
                                 }
                                 else
                                 {
-                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_NONE);
+                                    GetInteractionMgr().SetGameSate(GAME_OPT_STATE.GAME_NONE);
                                 }
                             }
                             break;
@@ -241,11 +266,11 @@ struct TGSUpdateLadder
 
                                 if (info.nActUid == CPlayer.Instance().m_nUid)
                                 {
-                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_DAPAI);
+                                    GetInteractionMgr().SetGameSate(GAME_OPT_STATE.GAME_DAPAI);
                                 }
                                 else
                                 {
-                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_NONE);
+                                    GetInteractionMgr().SetGameSate(GAME_OPT_STATE.GAME_NONE);
                                 }
 
                                 Debug.Log(string.Format("PT_DDZ_USER_PASS_uid:{0}", info.nUid));
@@ -262,13 +287,19 @@ struct TGSUpdateLadder
                                 m_GameTable.m_nJiaoFen = info.nJiaoFen;
                                 m_GameTable.m_nDizhuId = info.nUserId;
 
+                                if(info.nUserId == CPlayer.Instance().m_nUid)
+                                {
+                                    GameController m_Controller = GetGameController();
+                                    m_Controller.CardsOnTableEx(CharacterType.Player);
+                                }
+
                                 if(info.nActUid == CPlayer.Instance().m_nUid)
                                 {
-                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_DAPAI);
+                                    GetInteractionMgr().SetGameSate(GAME_OPT_STATE.GAME_DAPAI);
                                 }
                                 else
                                 {
-                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_NONE);
+                                    GetInteractionMgr().SetGameSate(GAME_OPT_STATE.GAME_NONE);
                                 }
                             }
                             break;
@@ -277,24 +308,25 @@ struct TGSUpdateLadder
                             {
                                 PT_DDZ_USER_JIAOPAI_INFO info = (PT_DDZ_USER_JIAOPAI_INFO)(PtrToStruct(data, typeof(PT_DDZ_USER_JIAOPAI_INFO)));
 
-                                if (m_InteractionMgr == null)
-                                {
-                                    m_InteractionMgr = GameObject.Find("/Canvas/myScenePanel").GetComponent<CInteractionMgr>();
-                                }
+                  
                                 if (info.nActUid == CPlayer.Instance().m_nUid)
                                 {
-                                   
-                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_JIAODIZHU);
+
+                                    GetInteractionMgr().SetGameSate(GAME_OPT_STATE.GAME_JIAODIZHU);
                                 }
                                 else
                                 {
-                                    m_InteractionMgr.SetGameSate(GAME_OPT_STATE.GAME_NONE);
+                                    GetInteractionMgr().SetGameSate(GAME_OPT_STATE.GAME_NONE);
                                 }
 
                             }
                             break;
                         case (int)host_msg.PT_DDZ_GAME_END:
                             {
+                                PT_DDZ_GAME_END_INFO info = (PT_DDZ_GAME_END_INFO)(PtrToStruct(data, typeof(PT_DDZ_GAME_END_INFO)));
+
+
+                                Debug.Log(string.Format("PT_DDZ_GAME_END_INFO"));
 
                             }
                             break;
@@ -327,12 +359,6 @@ struct TGSUpdateLadder
 
 
 
-                    ////抢地主出现
-                    //grab.SetActive(true);
-                    //disgrab.SetActive(true);
-                    //deal.SetActive(false);
-
-                    int t = 0;
 
                     Debug.Log(string.Format("==PT_ENTER_GAME_ACCEPT==11=={0}", info1.id));
 
@@ -478,6 +504,8 @@ struct TGSUpdateLadder
     // Use this for initialization
     void Start()
     {
+        m_InteractionMgr = null;
+        m_GameCtr = null;
 
         m_myPlayer = CPlayer.Instance();
 
@@ -507,8 +535,8 @@ struct TGSUpdateLadder
         Debug.Log("=====msgmanager-1-=-==-");
 
 
-        int ret = Connect("192.168.1.110", 61000, "", 0);
-     //   int ret = Connect("192.168.247.251", 61000, "", 0);
+     //   int ret = Connect("192.168.1.110", 61000, "", 0);
+        int ret = Connect("192.168.247.251", 61000, "", 0);
 
         i = ret;
 
@@ -796,7 +824,6 @@ struct TGSUpdateLadder
 
         int n = Marshal.SizeOf(info);
 
-        int t = 0;
 
 
         SendEx_1id((int)msg_id.PT_ENTER_GAME_REQUEST, by1, Marshal.SizeOf(info), socketindex);

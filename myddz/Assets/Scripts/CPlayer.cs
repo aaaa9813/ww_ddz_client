@@ -138,36 +138,36 @@ public class CTable:MonoBehaviour
 
         int i = 0;
 
-        GameObject pokeobj, poker;
-        //创建普通扑克
-        for (int color = 0; color < 4; color++)
-        {
-            for (int value = 0; value < 13; value++)
-            {
-                i++;
-                Weight w = (Weight)value;
-                Suits s = (Suits)color;
-                string name = string.Format("Poke_{0}_{1}", color, value);
-                Card card = new Card(name, w, s, 0, (value + 2) % 13 + 1 + color * 13);
-                m_Cardlist[card.GetId] = card;
+        //GameObject pokeobj, poker;
+        ////创建普通扑克
+        //for (int color = 0; color < 4; color++)
+        //{
+        //    for (int value = 0; value < 13; value++)
+        //    {
+        //        i++;
+        //        Weight w = (Weight)value;
+        //        Suits s = (Suits)color;
+        //        string name = string.Format("Poke_{0}_{1}", color, value);
+        //        Card card = new Card(name, w, s, 0, (value + 2) % 13 + 1 + color * 13);
+        //        m_Cardlist[card.GetId] = card;
 
-                pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)card.GetCardSuit, (int)card.GetCardWeight)) as GameObject;
-                poker = Instantiate(pokeobj);
-                m_Pokerlist[card.GetId] = poker;
-            }
-        }
-        Card smallJoker = new Card("Poke_4_13", Weight.SJoker, Suits.None, 0, 53);
-        Card largeJoker = new Card("Poke_4_14", Weight.LJoker, Suits.None, 0, 54);
-        m_Cardlist[smallJoker.GetId] = smallJoker;
-        m_Cardlist[largeJoker.GetId] = largeJoker;
+        //        pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)card.GetCardSuit, (int)card.GetCardWeight)) as GameObject;
+        //        poker = Instantiate(pokeobj);
+        //        m_Pokerlist[card.GetId] = poker;
+        //    }
+        //}
+        //Card smallJoker = new Card("Poke_4_13", Weight.SJoker, Suits.None, 0, 53);
+        //Card largeJoker = new Card("Poke_4_14", Weight.LJoker, Suits.None, 0, 54);
+        //m_Cardlist[smallJoker.GetId] = smallJoker;
+        //m_Cardlist[largeJoker.GetId] = largeJoker;
 
-        pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)smallJoker.GetCardSuit, (int)smallJoker.GetCardWeight)) as GameObject;
-        poker = Instantiate(pokeobj);
-        m_Pokerlist[smallJoker.GetId] = poker;
+        //pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)smallJoker.GetCardSuit, (int)smallJoker.GetCardWeight)) as GameObject;
+        //poker = Instantiate(pokeobj);
+        //m_Pokerlist[smallJoker.GetId] = poker;
 
-        pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)largeJoker.GetCardSuit, (int)largeJoker.GetCardWeight)) as GameObject;
-        poker = Instantiate(pokeobj);
-        m_Pokerlist[largeJoker.GetId] = poker;
+        //pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)largeJoker.GetCardSuit, (int)largeJoker.GetCardWeight)) as GameObject;
+        //poker = Instantiate(pokeobj);
+        //m_Pokerlist[largeJoker.GetId] = poker;
     }
 
     public void SetTablePai(int[] pai, int num)

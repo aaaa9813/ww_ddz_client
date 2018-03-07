@@ -124,6 +124,18 @@ public class CInteractionMgr : MonoBehaviour
 //        grab.SetActive(false);
 //        disgrab.SetActive(false);
     }
+
+
+    private MsgManager m_MsgMgr;
+
+    public MsgManager GetMsgMgr()
+    {
+        if (!m_MsgMgr)
+        {
+            m_MsgMgr = GameObject.Find("GameController").GetComponent<MsgManager>();
+        }
+        return m_MsgMgr;
+    }
     public void SetGameSate(GAME_OPT_STATE state = GAME_OPT_STATE.GAME_READY)
     {
         switch (state)
@@ -258,17 +270,28 @@ public class CInteractionMgr : MonoBehaviour
         int[] pai = new int[20];
 
         int count = 0;
-        if (playCard.CheckSelectCards(pai, out count))
+        if (playCard.CheckSelectCardsEx(pai, out count))
         {
-            btnChuPai.SetActive(false);
-            btnBuChu.SetActive(false);
+        //    btnChuPai.SetActive(false);
+        //    btnBuChu.SetActive(false);
         }
 
-       
-   
-        MsgManager m_Msg = GameObject.Find("GameController").GetComponent<MsgManager>();
+        //CardSprite[] sprites = playCard.GetComponentsInChildren<CardSprite>();
+        //for (int i = 0; i < sprites.Length; i++)
+        //{
+        //    if (sprites[i].Select)
+        //    {
+        //        pai[count++] = sprites[i].Poker.GetId;
+        //    }
+        //}
 
- 
+        //num = selectedCardsList.Count;
+
+
+        MsgManager m_Msg = GetMsgMgr();
+
+
+
         m_Msg.SendChuPai(pai, count);
         
     }
@@ -302,9 +325,7 @@ public class CInteractionMgr : MonoBehaviour
         //btn1Fen.SetActive(false);
         //btnBuQiang.SetActive(false);
 
-
-        MsgManager m_Msg = GameObject.Find("GameController").GetComponent<MsgManager>();
-        m_Msg.SendJiaoFen(fen);
+        GetMsgMgr().SendJiaoFen(fen);
     }
 
     /// <summary>

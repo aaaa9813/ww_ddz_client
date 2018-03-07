@@ -16,8 +16,9 @@ public class GameController : MonoBehaviour
     // Use this for initialization
 
 
-    
 
+
+    private CInteractionMgr m_InteractionMgr;
 
 	public Dictionary<string, bool> pokeflag;
     void Start()
@@ -37,6 +38,15 @@ public class GameController : MonoBehaviour
         get { return multiples; }
     }
 
+    public CInteractionMgr GetInteractionMgr()
+    {
+        if(!m_InteractionMgr)
+        {
+            m_InteractionMgr = GameObject.Find("/Canvas/myScenePanel").GetComponent<CInteractionMgr>();
+        }
+
+        return m_InteractionMgr;
+    }
     /// <summary>
     /// 初始化菜单面板
     /// </summary>
@@ -429,6 +439,29 @@ public class GameController : MonoBehaviour
     /// </summary>
     /// <param name="type"></param>
     public void CardsOnTable(CharacterType type)
+    {
+        GameObject parentObj = GameObject.Find(type.ToString());
+        HandCards cards = parentObj.GetComponent<HandCards>();
+        //积分翻倍
+        cards.Multiples = 2;
+        //销毁底牌精灵
+        CardSprite[] sprites = GameObject.Find("Desk").GetComponentsInChildren<CardSprite>();
+        for (int i = 0; i < sprites.Length; i++)
+        {
+            sprites[i].Destroy();
+        }
+
+        while (DeskCardsCache.Instance.CardsCount != 0)
+        {
+            Card card = DeskCardsCache.Instance.Deal();
+            cards.AddCard(card);
+        }
+        MakeHandCardsSprite(type, true);
+        //更新身份
+        UpdateIndentity(type, Identity.Landlord);
+    }
+
+    public void CardsOnTableEx(CharacterType type)
     {
         GameObject parentObj = GameObject.Find(type.ToString());
         HandCards cards = parentObj.GetComponent<HandCards>();
