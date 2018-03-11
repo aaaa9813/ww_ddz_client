@@ -89,7 +89,7 @@ struct TGSUpdateLadder
 */
 
 
-    public Int64 socketindex;
+    public Int64 socketindex = -1;
 
 
     public delegate int CSCallback(int Id, IntPtr data, int len, Int64 sockindex);
@@ -535,7 +535,7 @@ struct TGSUpdateLadder
         Debug.Log("=====msgmanager-1-=-==-");
 
 
-        int ret = Connect("192.168.1.110", 61000, "", 0);
+        int ret = Connect("35.196.108.73", 61000, "", 0);
        // int ret = Connect("192.168.247.251", 61000, "", 0);
 
         i = ret;
@@ -734,6 +734,7 @@ struct TGSUpdateLadder
 
     public void SendHeartjump()
     {
+        if(socketindex!=-1)
         SendEx_1id ((int)msg_id.PT_USER_HEART_JUMP, null, 0, socketindex);
     }
 
