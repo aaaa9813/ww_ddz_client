@@ -504,6 +504,11 @@ struct TGSUpdateLadder
     // Use this for initialization
     void Start()
     {
+
+
+        socketindex = -1;
+
+        Debug.Log(string.Format("======Start==={0}", socketindex));
         m_InteractionMgr = null;
         m_GameCtr = null;
 
@@ -535,8 +540,9 @@ struct TGSUpdateLadder
         Debug.Log("=====msgmanager-1-=-==-");
 
 
-        int ret = Connect("35.196.108.73", 61000, "", 0);
-       // int ret = Connect("192.168.247.251", 61000, "", 0);
+        int ret = Connect("192.168.1.110", 61000, "", 0);
+       // int ret = Connect("35.196.108.73", 61000, "", 0);
+        // int ret = Connect("192.168.247.251", 61000, "", 0);
 
         i = ret;
 
@@ -552,9 +558,6 @@ struct TGSUpdateLadder
     void FixedUpdate()
     {
         //真机打开,可看测试效果
-        //	return;
-
-
         InvokeRepeating("SendHeartjump", 3, 5);
 
 
@@ -734,8 +737,10 @@ struct TGSUpdateLadder
 
     public void SendHeartjump()
     {
-        if(socketindex!=-1)
-        SendEx_1id ((int)msg_id.PT_USER_HEART_JUMP, null, 0, socketindex);
+        if (socketindex != -1)
+        {
+            SendEx_1id((int)msg_id.PT_USER_HEART_JUMP, null, 0, socketindex);
+        }
     }
 
     public void SendReady()

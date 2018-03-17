@@ -2,6 +2,8 @@
 using System.Collections;
 
 public delegate void CardEvent(bool arg);
+
+public delegate void ChupaiEvent();
 /// <summary>
 /// 出牌顺序权限管理
 /// </summary>
