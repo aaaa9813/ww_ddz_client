@@ -164,7 +164,7 @@ public class PlayCard : MonoBehaviour
         }
     }
 
-    public void PlayCardsEx()
+    public void UserChupai()
     {
         HandCards player = GameObject.Find("Player").GetComponent<HandCards>();
         //如果符合将牌从手牌移到出牌缓存区
@@ -181,6 +181,28 @@ public class PlayCard : MonoBehaviour
 
         DeskCardsCache.Instance.Sort();
         GameController.AdjustCardSpritsPosition(CharacterType.Desk);
+        GameController.AdjustCardSpritsPosition(CharacterType.Player);
+
+        GameController.UpdateLeftCardsCount(CharacterType.Player, player.CardsCount);
+    }
+    public void PlayCardsEx()
+    {
+        HandCards player = GameObject.Find("Player").GetComponent<HandCards>();
+        //如果符合将牌从手牌移到出牌缓存区
+        DeskCardsCache.Instance.Clear();
+        DeskCardsCache.Instance.Rule = 0;
+
+        for (int i = 0; i < selectedSpriteList.Count; i++)
+        {
+            //先进行卡牌移动
+            player.PopCard(selectedSpriteList[i].Poker);
+            //  DeskCardsCache.Instance.AddCard(selectedSpriteList[i].Poker);
+            //  selectedSpriteList[i].transform.SetParent(GameObject.Find("Desk").transform);
+            selectedSpriteList[i].SetActvie(false);
+        }
+
+        //DeskCardsCache.Instance.Sort();
+        //GameController.AdjustCardSpritsPosition(CharacterType.Desk);
         GameController.AdjustCardSpritsPosition(CharacterType.Player);
 
         GameController.UpdateLeftCardsCount(CharacterType.Player, player.CardsCount);

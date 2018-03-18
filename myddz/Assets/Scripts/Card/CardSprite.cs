@@ -65,10 +65,17 @@ public class CardSprite : MonoBehaviour
     /// </summary>
     public void Destroy()
     {
+
+        Debug.Log("Destroy~~~~~~~~");
         //精灵化false
         card.isSprite = false;
         //销毁对象
         Destroy(this.gameObject);
+    }
+
+    public void SetActvie(bool flag)
+    {
+        gameObject.SetActive(flag);
     }
 
     /// <summary>

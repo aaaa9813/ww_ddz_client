@@ -174,20 +174,28 @@ struct TGSUpdateLadder
                                 m_GameTable.m_UserlistById[m_myPlayer.m_nUid].m_nPai = info1.pai;
                                 m_GameTable.m_UserlistById[m_myPlayer.m_nUid].m_nPaiNum = 17;
 
+
+                                m_GameTable.SetPlayerPai(info1.pai, 17);
+
+                                //set di pai
+                                m_GameTable.SetTablePai(info1.dipai, 3);
+
+
                                 GameObject playerObj = GameObject.Find("Player");
                                 HandCards cards = playerObj.GetComponent<HandCards>();
-
+                             
 
                                 //for (int i = 0; i < 17; i++)
                                 //{
-                                //    Card card = Deck.Instance.GetCardById(info1.pai[i]);
+                                //    Card card = m_GameTable.m_Cardlist[info1.pai[i]];
 
                                 //    cards.AddCard(card);
 
+                                //    m_GameTable.m_Pokerlist[]
                                 //}
 
-                 
-                                GetInteractionMgr().OnGameStart(info1);
+
+                             //   GetInteractionMgr().OnGameStart(info1);
 
 
 
@@ -230,17 +238,19 @@ struct TGSUpdateLadder
 
 
                                 Debug.Log(string.Format("PT_DDZ_USER_CHUPAI:{0}", info.nUid));
-                                //   m_GameTable.m_nPaiNum = info.nNum;
-                                // m_GameTable.m_nPai = (int[])info.nPai.Clone();
+
+
+                               
+                      
                                 //   m_GameTable.m_nPai = info.nPai;
 
-                           
-                     
-                               // m_GameTable.SetTablePai(info.nPai, info.nNum);
+
+
+                                m_GameTable.SetTablePai(info.nPai, info.nNum);
                                 m_GameTable.m_nChupaiUserId = info.nUid;
                                 m_GameTable.m_nActId = info.nActUid;
 
-                                if(info.nUid == CPlayer.Instance().m_nUid)
+                                if (info.nUid == CPlayer.Instance().m_nUid)
                                 {
                                     PlayCard playCard = GameObject.Find("Player").GetComponent<PlayCard>();
 

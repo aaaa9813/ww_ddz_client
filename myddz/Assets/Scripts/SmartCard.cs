@@ -209,6 +209,19 @@ public abstract class SmartCard : MonoBehaviour
         }
     }
 
+
+    public void Chupai(List<CardSprite> selectedSpriteList)
+    {
+        for (int i = 0; i < selectedSpriteList.Count; i++)
+        {
+          //  DeskCardsCache.Instance.AddCard(selectedSpriteList[i].Poker);
+            selectedSpriteList[i].transform.SetParent(GameObject.Find("Desk").transform);
+            //selectedSpriteList[i].Poker = selectedSpriteList[i].Poker;
+
+
+            selectedSpriteList[i].GoToPosition(GameObject.Find("Desk"), i);
+        }
+    }
     /// <summary>
     /// 出牌动画
     /// </summary>

@@ -70,13 +70,13 @@ public class CTable:MonoBehaviour
     /// <summary>
     ///当前出的牌数
     /// </summary>
-    private int m_nPaiNum;
+    public int m_nPaiNum;
 
     
     /// <summary>
     /// 当前出的牌ＩＤ，最大20张
     /// </summary>
-    private int[] m_nPai;
+    public int[] m_nPai;
 
     /// <summary>
     /// 三张底牌
@@ -116,6 +116,8 @@ public class CTable:MonoBehaviour
 
     public Dictionary<int, CUser> m_UserlistById;
 
+    CardSprite m_Sprite;
+
     CTable()
     {
 
@@ -135,43 +137,98 @@ public class CTable:MonoBehaviour
         m_Cardlist = new Dictionary<int, Card>();
         m_Pokerlist = new Dictionary<int, GameObject>();
         m_bflash = false;
-
+        m_Sprite = null;
         int i = 0;
 
-        //GameObject pokeobj, poker;
-        ////创建普通扑克
-        //for (int color = 0; color < 4; color++)
-        //{
-        //    for (int value = 0; value < 13; value++)
-        //    {
-        //        i++;
-        //        Weight w = (Weight)value;
-        //        Suits s = (Suits)color;
-        //        string name = string.Format("Poke_{0}_{1}", color, value);
-        //        Card card = new Card(name, w, s, 0, (value + 2) % 13 + 1 + color * 13);
-        //        m_Cardlist[card.GetId] = card;
+        GameObject pokeobj, poker;
+        //创建普通扑克
+        for (int color = 0; color < 4; color++)
+        {
+            for (int value = 0; value < 13; value++)
+            {
+                i++;
+                Weight w = (Weight)value;
+                Suits s = (Suits)color;
+                string name = string.Format("Poke_{0}_{1}", color, value);
+                Card card = new Card(name, w, s, CharacterType.Desk, (value + 2) % 13 + 1 + color * 13);
+                m_Cardlist[card.GetId] = card;
 
-        //        pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)card.GetCardSuit, (int)card.GetCardWeight)) as GameObject;
-        //        poker = Instantiate(pokeobj);
-        //        m_Pokerlist[card.GetId] = poker;
-        //    }
-        //}
-        //Card smallJoker = new Card("Poke_4_13", Weight.SJoker, Suits.None, 0, 53);
-        //Card largeJoker = new Card("Poke_4_14", Weight.LJoker, Suits.None, 0, 54);
-        //m_Cardlist[smallJoker.GetId] = smallJoker;
-        //m_Cardlist[largeJoker.GetId] = largeJoker;
+                pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)card.GetCardSuit, (int)card.GetCardWeight)) as GameObject;
+                poker = Instantiate(pokeobj);
+             
+                m_Sprite = poker.AddComponent<CardSprite>();
+                m_Sprite.Poker = card;
 
-        //pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)smallJoker.GetCardSuit, (int)smallJoker.GetCardWeight)) as GameObject;
-        //poker = Instantiate(pokeobj);
-        //m_Pokerlist[smallJoker.GetId] = poker;
+                m_Pokerlist[card.GetId] = poker;
+            }
+        }
+        Card smallJoker = new Card("Poke_4_13", Weight.SJoker, Suits.None, CharacterType.Desk, 53);
+        Card largeJoker = new Card("Poke_4_14", Weight.LJoker, Suits.None, CharacterType.Desk, 54);
+        m_Cardlist[smallJoker.GetId] = smallJoker;
+        m_Cardlist[largeJoker.GetId] = largeJoker;
 
-        //pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)largeJoker.GetCardSuit, (int)largeJoker.GetCardWeight)) as GameObject;
-        //poker = Instantiate(pokeobj);
-        //m_Pokerlist[largeJoker.GetId] = poker;
+        pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)smallJoker.GetCardSuit, (int)smallJoker.GetCardWeight)) as GameObject;
+        poker = Instantiate(pokeobj);
+      
+        m_Sprite = poker.AddComponent<CardSprite>();
+        m_Sprite.Poker = smallJoker;
+
+        m_Pokerlist[smallJoker.GetId] = poker;
+
+
+
+        pokeobj = Resources.Load<GameObject>(string.Format("poke_prefab/Poke_{0}_{1}", (int)largeJoker.GetCardSuit, (int)largeJoker.GetCardWeight)) as GameObject;
+        poker = Instantiate(pokeobj);
+
+        m_Sprite = poker.AddComponent<CardSprite>();
+        m_Sprite.Poker = largeJoker;
+        m_Pokerlist[largeJoker.GetId] = poker;
     }
 
+    public void ClearTable()
+    {
+        if(m_nPaiNum > 0)
+        {
+            for(int i = 0; i < m_nPaiNum; i++)
+            {
+                m_Pokerlist[m_nPai[i]].SetActive(false);
+            }
+        }
+    }
+
+
+    public void SetDiPai(int[] pai, int num)
+    {
+
+    }
+    public void SetPlayerPai(int[] pai, int num)
+    {
+
+        GameObject deskobj = GameObject.Find("Player");
+        Transform desktf = deskobj.transform;
+
+        for (int i = 0; i < num; i++)
+        {
+            if (!m_Pokerlist.ContainsKey(pai[i]))
+            {
+                Debug.LogError(string.Format("SetTablePai, pai id:[{0}] is error", pai[i]));
+                continue;
+            }
+            CardSprite cp = m_Pokerlist[pai[i]].GetComponent<CardSprite>();
+            cp.Poker.Attribution = CharacterType.Player;
+            cp.transform.SetParent(desktf);
+            m_Pokerlist[pai[i]].SetActive(true);
+            cp.GoToPosition(deskobj, i);
+        }
+    }
     public void SetTablePai(int[] pai, int num)
     {
+
+        ClearTable();
+        //保存当前出的牌，以便清除
+        m_nPaiNum = num;
+        m_nPai = pai;
+
         //m_bflash = true;
         //m_nPai = pai;
         //m_nPaiNum = num;
@@ -181,6 +238,27 @@ public class CTable:MonoBehaviour
         //{
         //    DeskCardsCache.Instance.AddCard(m_Cardlist[i]);
         //}
+
+ 
+        GameObject deskobj = GameObject.Find("Desk");
+        Transform desktf = deskobj.transform;
+
+        for (int i = 0; i < num; i++)
+        {
+            if(!m_Pokerlist.ContainsKey(pai[i]))
+            {
+                Debug.LogError(string.Format("SetTablePai, pai id:[{0}] is error", pai[i]));
+                continue;
+            }
+            CardSprite cp = m_Pokerlist[pai[i]].GetComponent<CardSprite>();
+
+            cp.transform.SetParent(desktf);
+            m_Pokerlist[pai[i]].SetActive(true);
+            cp.GoToPosition(deskobj, i);
+        }
+      
+   
+        
     }
 
     //private void Update()
