@@ -87,8 +87,8 @@ public class CardSprite : MonoBehaviour
        // sprite.depth = index;
         if (card.Attribution == CharacterType.Player)
         {
-            transform.localPosition =
-                parent.transform.Find("CardsStartPoint").localPosition + Vector3.right * 25 * index;
+            Transform cardpoint = parent.transform.Find("CardsStartPoint");
+            transform.localPosition = cardpoint.localPosition + Vector3.right * 25 * index;
             if (isSelected)
             {
                 transform.localPosition += Vector3.up * 10;

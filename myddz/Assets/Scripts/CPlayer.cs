@@ -200,6 +200,23 @@ public class CTable:MonoBehaviour
     public void SetDiPai(int[] pai, int num)
     {
 
+        GameObject deskobj = GameObject.Find("Player");
+        Transform desktf = deskobj.transform;
+
+        CUser me = m_UserlistById[CPlayer.Instance().m_nUid];
+        pai.CopyTo(me.m_nPai, 17);
+
+        me.m_nPaiNum += 3;
+
+        for (int i = 0; i < me.m_nPaiNum; i++)
+        {
+            CardSprite cp = m_Pokerlist[me.m_nPai[i]].GetComponent<CardSprite>();
+            cp.SetActvie(true);
+            cp.Poker.Attribution = CharacterType.Player;
+            cp.transform.SetParent(desktf);
+            m_Pokerlist[me.m_nPai[i]].SetActive(true);
+            cp.GoToPosition(deskobj, i);
+        }
     }
     public void SetPlayerPai(int[] pai, int num)
     {
@@ -209,6 +226,7 @@ public class CTable:MonoBehaviour
 
         for (int i = 0; i < num; i++)
         {
+            m_UserlistById[CPlayer.Instance().m_nUid].m_nPai[i] = pai[i];
             if (!m_Pokerlist.ContainsKey(pai[i]))
             {
                 Debug.LogError(string.Format("SetTablePai, pai id:[{0}] is error", pai[i]));
@@ -220,6 +238,11 @@ public class CTable:MonoBehaviour
             m_Pokerlist[pai[i]].SetActive(true);
             cp.GoToPosition(deskobj, i);
         }
+    }
+
+    public void SetPlayerDipai(int[] pai, int num)
+    {
+
     }
     public void SetTablePai(int[] pai, int num)
     {
@@ -251,7 +274,7 @@ public class CTable:MonoBehaviour
                 continue;
             }
             CardSprite cp = m_Pokerlist[pai[i]].GetComponent<CardSprite>();
-
+            cp.Poker.Attribution = CharacterType.Desk;
             cp.transform.SetParent(desktf);
             m_Pokerlist[pai[i]].SetActive(true);
             cp.GoToPosition(deskobj, i);

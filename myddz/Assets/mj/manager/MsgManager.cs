@@ -170,8 +170,10 @@ struct TGSUpdateLadder
                                 //跳过第一个字节,255
                                 info1 = (PT_DDZ_GAME_START_INFO)(PtrToStruct(data, typeof(PT_DDZ_GAME_START_INFO)));
 
+                                info1.pai.CopyTo(m_GameTable.m_UserlistById[m_myPlayer.m_nUid].m_nPai, 0);
 
-                                m_GameTable.m_UserlistById[m_myPlayer.m_nUid].m_nPai = info1.pai;
+                            //    m_GameTable.m_UserlistById[m_myPlayer.m_nUid].m_nPai = info1.pai;
+
                                 m_GameTable.m_UserlistById[m_myPlayer.m_nUid].m_nPaiNum = 17;
 
 
@@ -252,9 +254,9 @@ struct TGSUpdateLadder
 
                                 if (info.nUid == CPlayer.Instance().m_nUid)
                                 {
-                                    PlayCard playCard = GameObject.Find("Player").GetComponent<PlayCard>();
+                                    //PlayCard playCard = GameObject.Find("Player").GetComponent<PlayCard>();
 
-                                    playCard.PlayCardsEx();
+                                    //playCard.PlayCardsEx();
                                 }
 
                                 if (info.nActUid == CPlayer.Instance().m_nUid)
@@ -299,8 +301,11 @@ struct TGSUpdateLadder
 
                                 if(info.nUserId == CPlayer.Instance().m_nUid)
                                 {
-                                    GameController m_Controller = GetGameController();
-                                    m_Controller.CardsOnTableEx(CharacterType.Player);
+                                    //GameController m_Controller = GetGameController();
+                                    //m_Controller.CardsOnTableEx(CharacterType.Player);
+
+
+                                    m_GameTable.SetDiPai(info.pai, 3);
                                 }
 
                                 if(info.nActUid == CPlayer.Instance().m_nUid)
