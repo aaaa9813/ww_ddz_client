@@ -557,7 +557,7 @@ struct TGSUpdateLadder
 
         int ret = Connect("192.168.1.110", 61000, "", 0);
        // int ret = Connect("35.196.108.73", 61000, "", 0);
-        // int ret = Connect("192.168.247.251", 61000, "", 0);
+      //   int ret = Connect("192.168.247.251", 61000, "", 0);
 
         i = ret;
 

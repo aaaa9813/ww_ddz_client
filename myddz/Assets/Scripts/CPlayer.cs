@@ -199,6 +199,8 @@ public class CTable:MonoBehaviour
 
     public void SetDiPai(int[] pai, int num)
     {
+        //clear di pai
+        m_nPaiNum = 0;
 
         GameObject deskobj = GameObject.Find("Player");
         Transform desktf = deskobj.transform;
