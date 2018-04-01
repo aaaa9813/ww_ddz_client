@@ -151,7 +151,7 @@ namespace Assets.Scripts
 
             //m_bflash = true;
             //m_nPai = pai;
-            //m_nPaiNum = num;
+            m_nPaiNum = num;
 
             //DeskCardsCache.Instance.Clear();
             //for (int i = 0; i < m_nPaiNum; i++)

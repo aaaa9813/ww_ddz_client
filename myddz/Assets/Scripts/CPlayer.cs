@@ -41,19 +41,19 @@ public class CUser
     /// <summary>
     /// 玩家手里牌的数目
     /// </summary>
-    public int m_nPaiNum;
+  //  public int m_nPaiNum;
     /// <summary>
     /// 玩家的手里牌，存储的是ＩＤ
     /// </summary>
-    public int[] m_nPai;
+    public List<int> m_nPai;
 
 
     public CUser()
     {
         m_nIndex = -1;
         m_nId = -1;
-        m_nPaiNum = 0;
-        m_nPai = new int[20];
+
+        m_nPai = new List<int>();
     }
 
 }
@@ -195,7 +195,53 @@ public class CTable:MonoBehaviour
             }
         }
     }
+    public void SortMyCard(int[] pai, int num)
+    {
 
+   
+        
+        GameObject deskobj = GameObject.Find("Player");
+        Transform desktf = deskobj.transform;
+        CUser me = m_UserlistById[CPlayer.Instance().m_nUid];
+
+        for(int i = 0; i <num; i++)
+        {
+            me.m_nPai.Remove(pai[i]);
+        }
+      
+        List<Card> tmpcard = new List<Card>();
+        List<CardSprite> tmpcardsprite = new List<CardSprite>();
+
+        for (int i = 0; i < me.m_nPai.Count; i++)
+        {
+            CardSprite cp = m_Pokerlist[me.m_nPai[i]].GetComponent<CardSprite>();
+
+
+            tmpcardsprite.Add(cp);
+            tmpcard.Add(cp.Poker);
+
+
+            cp.SetActvie(true);
+            cp.Poker.Attribution = CharacterType.Player;
+            cp.transform.SetParent(desktf);
+            m_Pokerlist[me.m_nPai[i]].SetActive(true);
+
+        }
+
+        CardRules.SortCards(tmpcard, true);
+        for (int i = 0; i < tmpcard.Count; i++)
+        {
+
+            for (int j = 0; j < tmpcardsprite.Count; j++)
+            {
+                if (tmpcardsprite[j].Poker == tmpcard[i])
+                {
+                    tmpcardsprite[j].GoToPosition(deskobj, i);
+                }
+            }
+
+        }
+    }
 
     public void SetDiPai(int[] pai, int num)
     {
@@ -206,25 +252,58 @@ public class CTable:MonoBehaviour
         Transform desktf = deskobj.transform;
 
         CUser me = m_UserlistById[CPlayer.Instance().m_nUid];
-        pai.CopyTo(me.m_nPai, 17);
+      //  pai.CopyTo(me.m_nPai, 17);
 
-        me.m_nPaiNum += 3;
+       
 
-        for (int i = 0; i < me.m_nPaiNum; i++)
+        for(int i = 0; i < 3; i++)
+        {
+            me.m_nPai.Add(pai[i]);
+        }
+
+        List<Card> tmpcard = new List<Card>();
+        List<CardSprite> tmpcardsprite = new List<CardSprite>();
+
+        for (int i = 0; i < me.m_nPai.Count; i++)
         {
             CardSprite cp = m_Pokerlist[me.m_nPai[i]].GetComponent<CardSprite>();
+
+
+            tmpcardsprite.Add(cp);
+            tmpcard.Add(cp.Poker);
+
+
             cp.SetActvie(true);
             cp.Poker.Attribution = CharacterType.Player;
             cp.transform.SetParent(desktf);
             m_Pokerlist[me.m_nPai[i]].SetActive(true);
-            cp.GoToPosition(deskobj, i);
+   
         }
+
+        CardRules.SortCards(tmpcard, true);
+        for (int i = 0; i < tmpcard.Count; i++)
+        {
+
+            for (int j = 0; j < tmpcardsprite.Count; j++)
+            {
+                if (tmpcardsprite[j].Poker == tmpcard[i])
+                {
+                    tmpcardsprite[j].GoToPosition(deskobj, i);
+                }
+            }
+
+        }
+
     }
     public void SetPlayerPai(int[] pai, int num)
     {
 
         GameObject deskobj = GameObject.Find("Player");
         Transform desktf = deskobj.transform;
+
+
+        List<Card> tmpcard = new List<Card>();
+        List<CardSprite> tmpcardsprite = new List<CardSprite>();
 
         for (int i = 0; i < num; i++)
         {
@@ -235,13 +314,36 @@ public class CTable:MonoBehaviour
                 continue;
             }
             CardSprite cp = m_Pokerlist[pai[i]].GetComponent<CardSprite>();
+
+
+            tmpcardsprite.Add(cp);
+            tmpcard.Add(cp.Poker);
+
             cp.Poker.Attribution = CharacterType.Player;
             cp.transform.SetParent(desktf);
             m_Pokerlist[pai[i]].SetActive(true);
-            cp.GoToPosition(deskobj, i);
+    
         }
-    }
 
+        CardRules.SortCards(tmpcard, true);
+        for (int i = 0; i < tmpcard.Count; i++)
+        {
+
+            for (int j = 0; j < tmpcardsprite.Count; j++)
+            {
+                if (tmpcardsprite[j].Poker == tmpcard[i])
+                {
+                    tmpcardsprite[j].GoToPosition(deskobj, i);
+                }
+            }
+
+        }
+
+    }
+    void SortPai()
+    {
+
+    }
     public void SetPlayerDipai(int[] pai, int num)
     {
 
@@ -268,6 +370,9 @@ public class CTable:MonoBehaviour
         GameObject deskobj = GameObject.Find("Desk");
         Transform desktf = deskobj.transform;
 
+
+        List<Card> tmpcard = new List<Card>();
+        List<CardSprite> tmpcardsprite = new List<CardSprite>();
         for (int i = 0; i < num; i++)
         {
             if(!m_Pokerlist.ContainsKey(pai[i]))
@@ -276,14 +381,33 @@ public class CTable:MonoBehaviour
                 continue;
             }
             CardSprite cp = m_Pokerlist[pai[i]].GetComponent<CardSprite>();
+
+            tmpcardsprite.Add(cp);
+            tmpcard.Add(cp.Poker);
+
             cp.Poker.Attribution = CharacterType.Desk;
             cp.transform.SetParent(desktf);
             m_Pokerlist[pai[i]].SetActive(true);
-            cp.GoToPosition(deskobj, i);
+           
         }
-      
-   
-        
+
+        //排序所出的牌
+        CardRules.SortCards(tmpcard, true);
+        for(int i = 0; i < tmpcard.Count; i++)
+        {
+
+            for (int j = 0; j < tmpcardsprite.Count; j++)
+            {
+                if (tmpcardsprite[j].Poker == tmpcard[i])
+                {
+                    tmpcardsprite[j].GoToPosition(deskobj, i);
+                }
+            }
+
+        }
+
+
+
     }
 
     //private void Update()
