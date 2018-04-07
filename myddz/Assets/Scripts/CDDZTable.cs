@@ -172,8 +172,9 @@ namespace Assets.Scripts
                     continue;
                 }
                 CardSprite cp = m_Pokerlist[pai[i]].GetComponent<CardSprite>();
-
+                cp.transform.localScale = new Vector3(1, 1, 1);
                 cp.transform.SetParent(desktf);
+                cp.transform.localScale = new Vector3(1, 1, 1);
                 m_Pokerlist[pai[i]].SetActive(true);
                 cp.GoToPosition(deskobj, i);
             }

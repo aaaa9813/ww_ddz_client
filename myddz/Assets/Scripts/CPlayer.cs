@@ -197,8 +197,7 @@ public class CTable:MonoBehaviour
     }
     public void SortMyCard(int[] pai, int num)
     {
-
-   
+          
         
         GameObject deskobj = GameObject.Find("Player");
         Transform desktf = deskobj.transform;
@@ -276,6 +275,8 @@ public class CTable:MonoBehaviour
             cp.SetActvie(true);
             cp.Poker.Attribution = CharacterType.Player;
             cp.transform.SetParent(desktf);
+
+            cp.transform.localScale = new Vector3(1, 1, 1);
             m_Pokerlist[me.m_nPai[i]].SetActive(true);
    
         }
@@ -321,6 +322,7 @@ public class CTable:MonoBehaviour
 
             cp.Poker.Attribution = CharacterType.Player;
             cp.transform.SetParent(desktf);
+            cp.transform.localScale = new Vector3(1, 1, 1);
             m_Pokerlist[pai[i]].SetActive(true);
     
         }
@@ -387,6 +389,9 @@ public class CTable:MonoBehaviour
 
             cp.Poker.Attribution = CharacterType.Desk;
             cp.transform.SetParent(desktf);
+
+            cp.transform.localScale = new Vector3(1, 1, 1);
+
             m_Pokerlist[pai[i]].SetActive(true);
            
         }

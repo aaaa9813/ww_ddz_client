@@ -16,7 +16,19 @@ public class CardSprite : MonoBehaviour
 		GameObject obj = transform.Find("Button").gameObject;
 
 		Button btn = obj.GetComponent<Button> ();
-		btn.onClick.AddListener (delegate {
+
+    
+
+        btn.GetComponent<RectTransform>().sizeDelta = this.GetComponent<RectTransform>().sizeDelta;
+
+        Vector2 v2 = btn.GetComponent<RectTransform>().sizeDelta;
+
+        Debug.Log(string.Format("%s===%f, %f", btn.name, v2.x, v2.y));
+
+
+        btn.transform.localScale = new Vector3(1,1,1);
+        btn.transform.position = new Vector3(0,0,0);
+        btn.onClick.AddListener (delegate {
 			this.OnClick ();
 		});
     }
@@ -125,6 +137,24 @@ public class CardSprite : MonoBehaviour
                 transform.localPosition += Vector3.up * 10;
                 isSelected = true;
             }
+        }
+    }
+
+    void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log(string.Format("Left click on this obj. name is:{0}", this.name));
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            Debug.Log(string.Format("Right click on this obj. name is:{0}", this.name));
+        }
+
+        if (Input.GetMouseButtonDown(2))
+        {
+            Debug.Log(string.Format("Middle click on this obj. name is:{0}", this.name));
         }
     }
 }
