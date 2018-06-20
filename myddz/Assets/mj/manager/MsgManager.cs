@@ -12,10 +12,10 @@ public class MsgManager : MonoBehaviour
 	[DllImport ("xuanyusong")]
 	private static extern float addFloat(float a,float b);	
 	*/
-    public CPlayer m_myPlayer = null;
+    public static CPlayer m_myPlayer = null;
 
 
-    public CTable m_GameTable = null;
+    public static CTable m_GameTable = null;
 
     
     [SerializeField, SetProperty("Number")]
@@ -45,9 +45,9 @@ public class MsgManager : MonoBehaviour
         return m_GameCtr;
     }
 
-    private CInteractionMgr m_InteractionMgr;
+	static  private CInteractionMgr m_InteractionMgr;
 
-    public CInteractionMgr GetInteractionMgr()
+    public static CInteractionMgr GetInteractionMgr()
     {
         if (!m_InteractionMgr)
         {
@@ -89,7 +89,7 @@ struct TGSUpdateLadder
 */
 
 
-    public Int64 socketindex = -1;
+    public static Int64 socketindex = -1;
 
 
     public delegate int CSCallback(int Id, IntPtr data, int len, Int64 sockindex);
@@ -103,7 +103,7 @@ struct TGSUpdateLadder
     /// <returns>The callback function.</returns>
     /// <param name="msg">Message.</param>
     [AOT.MonoPInvokeCallbackAttribute(typeof(CSCallback))]
-    int OnConnectCallFunc(int Id, IntPtr data, int len, Int64 sockindex)
+    public static int OnConnectCallFunc(int Id, IntPtr data, int len, Int64 sockindex)
     {
         //	GUILayout.Label ("=====" + msg);
         //msg1 = msg;
@@ -429,22 +429,22 @@ struct TGSUpdateLadder
 
     CSCallback OnConnectCall;
 
-    [DllImport("RakNet")]
+    [DllImport("__Internal")]
     public static extern int Connect(string host, int remotePort, string passwordData, int passwordDataLength);
 
-    [DllImport("RakNet")]
+    [DllImport("__Internal")]
     extern static int RegMsg(int msgid, CSCallback callback);
 
-    [DllImport("RakNet")]
+    [DllImport("__Internal")]
     private static extern void MsgLoop();
 
-    [DllImport("RakNet")]
+    [DllImport("__Internal")]
     private static extern int MsgInit();
 
-    [DllImport("RakNet")]
+    [DllImport("__Internal")]
     private static extern int SendEx(int msgid, int msgid2, byte[] data, int len, Int64 sockindex);
 
-    [DllImport("RakNet")]
+    [DllImport("__Internal")]
     private static extern int SendEx_1id(int msgid, byte[] data, int len, Int64 sockindex);
 
     public static byte[] StructToBytes(object structObj, int size)
@@ -484,7 +484,7 @@ struct TGSUpdateLadder
         return rtn;
     }
 
-    public object PtrToStruct(IntPtr ptr, Type type)
+    public static object PtrToStruct(IntPtr ptr, Type type)
     {
         object rtn;
 
@@ -540,11 +540,10 @@ struct TGSUpdateLadder
 
         OnConnectCall = OnConnectCallFunc;
 
-        j = MsgInit();
+       MsgInit();
 
 
-        if (j != 0)
-            return;
+   
         Debug.Log("=====msgmanager--=-==-");
 
         ///注册消息,iso注意此消息
@@ -562,7 +561,7 @@ struct TGSUpdateLadder
         Debug.Log("=====msgmanager-1-=-==-");
 
 
-        int ret = Connect("192.168.1.110", 61000, "", 0);
+        int ret = Connect("192.168.247.251", 61000, "", 0);
        // int ret = Connect("35.196.108.73", 61000, "", 0);
       //   int ret = Connect("192.168.247.251", 61000, "", 0);
 
@@ -811,7 +810,7 @@ struct TGSUpdateLadder
 
         SendEx((int)msg_id.PT_HOST_MESSAGE, (int)host_msg.PT_DDZ_JIAOFEN, by1, Marshal.SizeOf(info), socketindex);
     }
-    public void SendEntergame(int serverid, int gameid,
+    public static void SendEntergame(int serverid, int gameid,
                           int uid)
     {
         //		RakNet::BitStream ws;

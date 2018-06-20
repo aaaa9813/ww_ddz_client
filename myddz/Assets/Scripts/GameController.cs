@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
-using UnityEditor;
+//using UnityEditor;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
